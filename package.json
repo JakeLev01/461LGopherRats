@@ -1,0 +1,19 @@
+{
+  "name": "461lgopherrats",
+  "version": "1.0.0",
+  "description": "ECE461L Software Design Lab Project",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeLev01/461LGopherRats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakeLev01/461LGopherRats/issues"
+  },
+  "homepage": "https://github.com/JakeLev01/461LGopherRats#readme"
+}
