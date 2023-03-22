@@ -18,7 +18,7 @@ def addNewProject(PersonID, Name):
 def joinProject(PersonID, Name):
 
     #join project and add ID to ID list
-    client = MongoClient("mongodb+srv://jakeleverett:<password>@cluster0.ikaumwm.mongodb.net/test")
+    client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
 
     db = client['Projects']
 
