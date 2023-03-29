@@ -1,4 +1,9 @@
+from flask import Flask, request, jsonify
+
+
 class hardwareSet:
+
+    app = Flask(__name__)
 
     def __init__(self):
         self.__capacity = 0

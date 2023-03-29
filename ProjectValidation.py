@@ -1,8 +1,12 @@
 from pymongo import MongoClient
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 
+app = Flask(__name__)
 
+app.route('/addNewProject/')
 def addNewProject(PersonID, Name):
+    PersonID = request.args.get("PersonID")
+    Name = request.args.get("Name")
 
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
 
@@ -15,7 +19,10 @@ def addNewProject(PersonID, Name):
 
     client.close()
 
+app.route("/joingProject/")
 def joinProject(PersonID, Name):
+    PersonID = request.args.get("PersonID")
+    Name = request.args.get("Name")
 
     #join project and add ID to ID list
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")

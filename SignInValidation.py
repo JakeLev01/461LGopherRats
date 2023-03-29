@@ -1,6 +1,10 @@
 from pymongo import MongoClient
+from flask import Flask, request, jsonify
 import cipher
 
+app = Flask(__name__)
+
+app.route('/checkUserName/userName')
 def checkUserName(userName):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Users']
@@ -10,7 +14,10 @@ def checkUserName(userName):
 
     return False
 
+app.route('/checkSignIn/')
 def checkSignIn(userName, password):
+    userName = request.args.get("userName")
+    password = request.args.get("password")
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Users']
 
@@ -24,11 +31,14 @@ def checkSignIn(userName, password):
 
     return "Username is not in the database"
 
+app.route("/createNewUser/")
 def createNewUser(userName, password):
+    userName = request.args.get("userName")
+    password = request.args.get("password")
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Users']
 
-    if(checkUserName(userName)):
+    if checkUserName(userName):
         DCpassword = cipher.encrypt(password,3,1)
         db.create_collection(userName)
         post = {"userID": userName, "password": DCpassword}
