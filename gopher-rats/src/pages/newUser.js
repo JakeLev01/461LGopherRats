@@ -38,6 +38,7 @@ class newUser extends React.Component {
             if (`${data.projectId}` == "Account Successfully created")
                 return <Navigate to = "/project" />;
         })
+        
     }
 
     render() {
