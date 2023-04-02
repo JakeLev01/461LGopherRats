@@ -5,6 +5,10 @@ app = Flask(__name__)
 
 app.route('/check_out')
 def check_out(projectID, qty, HWSet):
+    projectID = request.args.get("projectID")
+    qty = request.args.get("qty")
+    HWSet = request.args.get("HWSet")
+
     HWSetAvailability = 0
     CheckedOut = 0
     global collection
@@ -51,6 +55,10 @@ def check_out(projectID, qty, HWSet):
 
 app.route('/check_in')
 def check_in(projectID, qty, HWSet):
+    projectID = request.args.get("projectID")
+    qty = request.args.get("qty")
+    HWSet = request.args.get("HWSet")
+
     HWSetAvailability = 0
     CheckedOut = 0
     Capacity = 0
