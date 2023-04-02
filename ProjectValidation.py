@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 app.route('/addNewProject/')
+
 def addNewProject(PersonID, Name):
     PersonID = request.args.get("PersonID")
     Name = request.args.get("Name")
@@ -14,12 +15,18 @@ def addNewProject(PersonID, Name):
 
     mycol = db.create_collection(Name)
 
+    hw_set_1 = {'HW_set': 1, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0} 
+    hw_set_2 = {'HW_set': 2, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
+
+    mycol.insert_many([hw_set_1, hw_set_2])
+
     new_proj = {'Id': PersonID, 'Name': Name}
     mycol.insert_one(new_proj)
 
     client.close()
 
 app.route("/joingProject/")
+
 def joinProject(PersonID, Name):
     PersonID = request.args.get("PersonID")
     Name = request.args.get("Name")
@@ -32,6 +39,10 @@ def joinProject(PersonID, Name):
     myproj = db[Name]
 
     project = myproj.find_one({'Name': Name})
+
+    if not project:
+        print('Project does not exist!')
+        return
 
     # Add the new user to the 'users' field in the project document
     project['ID'].append(PersonID)
