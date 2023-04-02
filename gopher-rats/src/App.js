@@ -6,6 +6,7 @@ import NewUser from './pages/newUser';
 import Greeting from './Conditional_rendering';
 import NewProject from './pages/newProject';
 import Project from './pages/project';
+import Hardware from './pages/resources';
 import React from 'react';
 
 
@@ -22,6 +23,7 @@ class App extends React.Component {
             <Route path="/newProject" element={<NewProject />} />
 
             <Route path="/project" element={<Project />} />
+            <Route path="/resources" element={<Hardware />} />
           </Routes>
         </BrowserRouter>
       </div>
