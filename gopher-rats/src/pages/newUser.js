@@ -36,7 +36,7 @@ class newUser extends React.Component {
         } else {
             alert('New user was created');
             //go to projects page
-            return <Navigate to="/newProject" />;
+            return <Navigate to="/newProject" replace={true}/>;
         }
         
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import Hardware from './resources';
 
 class project extends React.Component
 {
@@ -16,6 +17,7 @@ class project extends React.Component
         event.preventDefault();
         //shows name of project and description
         //go to resources/hardware with ID prop 
+        //<Hardware projectid={this.props.project.id}/>
     }
 
     handleExistingIDChange = event => {
@@ -41,7 +43,7 @@ class project extends React.Component
             </div>
           <button type="submit">Enter</button>
           <br></br>
-          <button>Log-Out</button>
+          <button><Link to="/welcome">Log-out</Link></button>
         </form>
         )
     }

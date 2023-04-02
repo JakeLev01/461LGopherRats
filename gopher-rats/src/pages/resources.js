@@ -1,13 +1,15 @@
 import React from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
+
 
 class Hardware extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     checkedOut: [100, 100],
-    available: [100, 100], //get from database
-    inputs: new Array(props.HWsets.length).fill(0),
+    available: [100, 100],
+    HWsets: [1, 2], 
+    inputs: new Array(2).fill(0),
   };
   this.handleCheckIn = this.handleCheckIn.bind(this);
   this.handleCheckOut = this.handleCheckOut.bind(this);
@@ -26,6 +28,16 @@ class Hardware extends React.Component {
         available,
         inputs: newInputs,
       });
+
+      const projectId = this.props.projectid;
+      fetch(`/hardware/checkin/${projectId}/${input}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Check-in successful:', data);
+        })
+        .catch(error => {
+          console.error('Error checking in:', error);
+        });
     }
     else{
       const newInputs = [...inputs];
@@ -36,6 +48,7 @@ class Hardware extends React.Component {
         inputs: newInputs,
       });
     }
+    alert(input + ' hardware checked in');
   };
 
   handleCheckOut = (index) => {
@@ -51,6 +64,16 @@ class Hardware extends React.Component {
         available,
         inputs: newInputs,
       });
+
+      const projectId = this.props.projectid;
+      fetch(`/hardware/checkout/${projectId}/${input}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Check-out successful:', data);
+        })
+        .catch(error => {
+          console.error('Error checking out:', error);
+        });
     }
     else{
       const newInputs = [...inputs];
@@ -61,6 +84,8 @@ class Hardware extends React.Component {
         inputs: newInputs,
       });
     }
+
+    alert(input + ' hardware checked out');
   };
 
   handleInput = (event, index) => {
@@ -73,10 +98,10 @@ class Hardware extends React.Component {
   };
 
   render() {
-    const { available, checkedOut, inputs } = this.state;
+    const { available, checkedOut, inputs, HWsets } = this.state;
     return (
       <div>
-        {this.props.HWsets.map((set, index) => (
+        {HWsets.map((set, index) => (
             <div key={set}>
               <span>HWSet {set}: </span>
                 <p>Available: {available[index]}/100</p><br/>
@@ -86,12 +111,12 @@ class Hardware extends React.Component {
                     value={inputs[index]}
                     onChange={(event) => this.handleInput(event, index)}
                 />
-                <button onClick={() => this.handleCheckOut(index)}>
+                <Button variant="contained" color="primary" onClick={() => this.handleCheckOut(index)}>
                     Check Out
-                </button>
-                <button onClick={() => this.handleCheckIn(index)}>
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => this.handleCheckIn(index)}>
                     Check In
-                </button>
+                </Button>
             </div>
         ))}
       </div>
