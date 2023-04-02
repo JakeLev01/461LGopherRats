@@ -30,14 +30,14 @@ class newUser extends React.Component {
     }
 
     handleNewUserSubmit = event => {
-        if (this.state.Password !== this.state.ConfirmPassword) {
-            alert('Passwords do not match');
-            event.preventDefault();
-        } else {
-            alert('New user was created');
-            //go to projects page
-            return <Navigate to="/newProject" />;
-        }
+        fetch(`/createNewUser/${this.state.UserID}/${this.state.Password}/${this.state.Username}`,{methods: 'GET', mode: "no-cors"})
+            .then(response => response.text())    
+            .then(data => {
+                console.log(data)
+            alert(`${data.projectId}`); //print out if it successfully made new user or not
+            if (`${data.projectId}` == "Account Successfully created")
+                return <Navigate to = "/project" />;
+        })
         
     }
 

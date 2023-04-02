@@ -1,18 +1,27 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import Hardware from "resources.js";
 
 class newProject extends React.Component {
   state = {
     Name: '',
     Description: '',
     ProjectID: '',
-    
   }
 
   handleSubmitProject = (event) => {
+    <Hardware ProjectID = {this.props.project.id}></Hardware>
+    fetch(`/checkSignIn/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
+      .then(response => response.text())    
+      .then(data => {
+        console.log(data)
+      alert(`${data.projectId}`); //print out if it successfully signed in or not.
+      if (`${data.projectId}` == "Successfully added new project")
+        return <Navigate to = "/resources" />;
+      })
     //check if project id already exists
-    alert('New project was created')
+    //alert('New project was created')
     event.preventDefault();
     //go to resources/hardware with ID prop 
   }
@@ -66,6 +75,9 @@ class newProject extends React.Component {
         <button>
           <Link to="/project">use existing project</Link>
         </button>
+        <button>
+            <Link to="/welcome">Log-Out</Link>
+          </button>
       </div>
     )
   }

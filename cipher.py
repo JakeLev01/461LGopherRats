@@ -1,3 +1,4 @@
+#encoding user passwords
 
 def encrypt(inputText, N, D):
     rev = inputText[::-1]
