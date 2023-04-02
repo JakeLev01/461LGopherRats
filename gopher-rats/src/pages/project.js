@@ -17,6 +17,8 @@ class project extends React.Component
             .then(data => {
                 console.log(data)
             alert(`${data.projectId}`); //print out if it successfully joined existing one or not.
+            if (`${data.projectId}` == "Successfully joined project")
+                return <Navigate to = "/resources" />;
         })
         //checks if valid project
         //alert ('Welcome Back', this.state.ExistingID)

@@ -26,11 +26,9 @@ class welcome extends React.Component{
         .then(data => {
             console.log(data)
           alert(`${data.projectId}`); //print out if it successfully signed in or not.
+          if (`${data.projectId}` == "Successfully Signed In")
+            return <Navigate to = "/project" />;
         })
- 
-      //alert(`Username: ${this.state.Username}`);
-      //go to projects page
-      //<Navigate to="/newProject" />;
       event.preventDefault();
     }
 

@@ -8,7 +8,6 @@ class newProject extends React.Component {
     Name: '',
     Description: '',
     ProjectID: '',
-    
   }
 
   handleSubmitProject = (event) => {
@@ -18,9 +17,11 @@ class newProject extends React.Component {
       .then(data => {
         console.log(data)
       alert(`${data.projectId}`); //print out if it successfully signed in or not.
+      if (`${data.projectId}` == "Successfully added new project")
+        return <Navigate to = "/resources" />;
       })
     //check if project id already exists
-    alert('New project was created')
+    //alert('New project was created')
     event.preventDefault();
     //go to resources/hardware with ID prop 
   }

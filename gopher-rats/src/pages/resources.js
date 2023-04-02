@@ -155,6 +155,9 @@ class Hardware extends React.Component {
                 </Button>
 =======
                 </button>
+                <button> 
+                  <Link to="/project">Leave Project</Link>
+                </button>
                 <button>
                   <Link to="/welcome">Log-Out</Link>
                 </button>

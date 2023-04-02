@@ -35,15 +35,9 @@ class newUser extends React.Component {
             .then(data => {
                 console.log(data)
             alert(`${data.projectId}`); //print out if it successfully made new user or not
+            if (`${data.projectId}` == "Account Successfully created")
+                return <Navigate to = "/project" />;
         })
-            //alert('New user was created');
-            //go to projects page
-<<<<<<< HEAD
-            return <Navigate to="/newProject" replace={true}/>;
-        }
-=======
-            //return <Navigate to="/newProject" />;
->>>>>>> a0e33693a36d368cdbb30556ec442fdfb4f901af
         
     }
 
