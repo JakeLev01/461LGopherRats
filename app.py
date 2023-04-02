@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 import cipher
 
 app = Flask(__name__)
@@ -214,4 +214,22 @@ def getProject(projectID):
             return jsonify(post)
 
     return "Invalid projectID"
+
+############
+#Redirect
+############
+
+app.route('/resourceRedirect')
+def resourceRedirect():
+    return redirect('/resource')
+
+app.route('signInRedirect')
+def signInRedirect():
+    return redirect('/signIn')
+
+app.route('/newProjectRedirect')
+def newProjectRedirect():
+    return  redirect('/newProject')
+
+
 
