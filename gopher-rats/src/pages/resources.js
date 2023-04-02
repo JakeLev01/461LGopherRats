@@ -9,6 +9,7 @@ class Hardware extends React.Component {
     this.state = {
     checkedOut: [100, 100],
     available: [100, 100], //get from database
+    HWsets: [1,2],
     inputs: new Array(2).fill(0)
     };
   }
