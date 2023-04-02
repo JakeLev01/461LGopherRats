@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import Hardware from "resources.js";
+import Hardware from "./resources";
 
 class newProject extends React.Component {
   state = {
