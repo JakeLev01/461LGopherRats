@@ -6,16 +6,9 @@ import { Link, Navigate } from "react-router-dom";
 
 class welcome extends React.Component{
   state = {
-    Username: '',
     UserID: '',
-    Password: '',
+    Password: ''
   }
-  
-    handleUsernameChange = (event) => {
-      this.setState({
-        Username: event.target.value
-      });
-    }
 
     handleUserIDChange = event => {
       this.setState({ UserID: event.target.value });
@@ -28,10 +21,16 @@ class welcome extends React.Component{
     }
   
     handleUserSubmit = (event) => {
-     
-      alert(`Username: ${this.state.Username}`);
+      fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{methods: 'GET', mode: "no-cors"})
+        .then(response => response.text())    
+        .then(data => {
+            console.log(data)
+          alert(`${data.projectId}`); //print out if it successfully signed in or not.
+        })
+ 
+      //alert(`Username: ${this.state.Username}`);
       //go to projects page
-      <Navigate to="/newProject" />;
+      //<Navigate to="/newProject" />;
       event.preventDefault();
     }
 
@@ -42,15 +41,6 @@ class welcome extends React.Component{
         <h1>Welcome to the GopherRats Hardware Site!</h1>
         <h4>Please sign in to continue:</h4>
         <form onSubmit={this.handleUserSubmit}>
-            <label>
-              UserName: 
-              <input type="text"
-                     value={this.state.Username} 
-                     onChange={this.handleUsernameChange} 
-                     placeholder=""
-              />
-            </label>
-            <br />
             <label>
               UserID: 
               <input type="text" 
