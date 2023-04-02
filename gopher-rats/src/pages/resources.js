@@ -67,6 +67,9 @@ class Hardware extends React.Component {
                 <button onClick={() => this.handleCheckIn(index)}>
                     Check In
                 </button>
+                <button> 
+                  <Link to="/project">Leave Project</Link>
+                </button>
                 <button>
                   <Link to="/welcome">Log-Out</Link>
                 </button>
