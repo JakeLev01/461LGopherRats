@@ -11,7 +11,7 @@ class project extends React.Component
 
     handleSubmitExisting= (event) =>
     {
-        fetch(`/joinProject/${this.state.ExistingID}`,{methods: 'GET', mode: "no-cors"})
+        fetch(`/joinProject/${this.state.ExistingID}/${this.state.Name}`,{methods: 'GET', mode: "no-cors"})
             .then(response => response.text())    
             .then(data => {
                 console.log(data)
@@ -45,9 +45,14 @@ class project extends React.Component
                     placeholder=""
                 />
             </div>
+          <button>
+            <Link to="/newProject">Create new project</Link>
+          </button>
           <button type="submit">Enter</button>
           <br></br>
-          <button>Log-Out</button>
+          <button>
+            <Link to="/welcome">Log-Out</Link>
+          </button>
         </form>
         )
     }

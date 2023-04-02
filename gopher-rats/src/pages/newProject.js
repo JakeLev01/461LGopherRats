@@ -11,7 +11,7 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
-    fetch(`/checkSignIn/${this.state.UserID},`,{methods: 'GET', mode: "no-cors"})
+    fetch(`/checkSignIn/${this.state.UserID}/${this.state.Name}`,{methods: 'GET', mode: "no-cors"})
       .then(response => response.text())    
       .then(data => {
         console.log(data)
@@ -72,6 +72,9 @@ class newProject extends React.Component {
         <button>
           <Link to="/project">use existing project</Link>
         </button>
+        <button>
+            <Link to="/welcome">Log-Out</Link>
+          </button>
       </div>
     )
   }
