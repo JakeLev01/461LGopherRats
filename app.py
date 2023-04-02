@@ -221,15 +221,17 @@ def getProject(projectID):
 
 app.route('/resourceRedirect')
 def resourceRedirect():
-    return redirect('/resource')
+    return redirect('/resources')
 
-app.route('signInRedirect')
+app.route('/signInRedirect')
 def signInRedirect():
     return redirect('/signIn')
 
 app.route('/newProjectRedirect')
 def newProjectRedirect():
-    return  redirect('/newProject')
+    return redirect('/newProject')
 
-
+app.route('/projectRedirect')
+def projectRedirect():
+    return redirect('/project')
 
