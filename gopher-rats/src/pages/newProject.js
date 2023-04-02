@@ -12,15 +12,14 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
-    <Hardware ProjectID = {this.props.project.id}></Hardware>
-    fetch(`/checkSignIn/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
+    //<Hardware ProjectID = {this.props.project.id}></Hardware>
+    fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
       .then(response => response.text())    
       .then(data => {
         console.log(data)
-      alert(`${data.projectId}`); //print out if it successfully signed in or not.
+      alert(`${data}`); //print out if it successfully signed in or not.
       })
     //check if project id already exists
-    alert('New project was created')
     event.preventDefault();
     //go to resources/hardware with ID prop 
   }
