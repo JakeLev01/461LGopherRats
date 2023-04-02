@@ -7,61 +7,35 @@ class Hardware extends React.Component {
     this.state = {
     checkedOut: [100, 100],
     available: [100, 100], //get from database
-    inputs: new Array(props.HWsets.length).fill(0),
-  };
-  this.handleCheckIn = this.handleCheckIn.bind(this);
-  this.handleCheckOut = this.handleCheckOut.bind(this);
+    inputs: new Array(2).fill(0)
+    };
   }
 
   handleCheckIn = (index) => {
     const { available, checkedOut, inputs } = this.state;
     const input = inputs[index];
-    if (input <= checkedOut[index] && available[index] + input <= 100) {
-      checkedOut[index] -= input;
-      available[index] += input;
-      const newInputs = [...inputs];
-      newInputs[index] = 0;
-      this.setState({
-        checkedOut,
-        available,
-        inputs: newInputs,
-      });
-    }
-    else{
-      const newInputs = [...inputs];
-      newInputs[index] = 0;
-      this.setState({
-        checkedOut,
-        available,
-        inputs: newInputs,
-      });
-    }
-  };
+
+    fetch(`/checkIn/${this.state.index}/${this.state.inputs[index]}/${this.state.ProjectID}`,{methods: 'GET', mode: "no-cors"})
+      .then(response => response.text())    
+      .then(data => {
+        console.log(data)
+        this.setState({available: `${data.available}`});
+      alert(`${data.checkedOut}`); //print out if it successfully checkedin or not
+      })
+    };
 
   handleCheckOut = (index) => {
     const { available, checkedOut, inputs } = this.state;
     const input = inputs[index];
-    if (input <= available[index] && available[index] - input >= 0) {
-      available[index] -= input;
-      checkedOut[index] += input;
-      const newInputs = [...inputs];
-      newInputs[index] = 0;
-      this.setState({
-        checkedOut,
-        available,
-        inputs: newInputs,
-      });
-    }
-    else{
-      const newInputs = [...inputs];
-      newInputs[index] = 0;
-      this.setState({
-        checkedOut,
-        available,
-        inputs: newInputs,
-      });
-    }
-  };
+
+    fetch(`/checkIn/${this.state.index}/${this.state.inputs[index]}/${this.state.ProjectID}`,{methods: 'GET', mode: "no-cors"})
+      .then(response => response.text())    
+      .then(data => {
+        console.log(data)
+        this.setState({available: `${data.available}`});
+      alert(`${data.checkedOut}`); //print out if it successfully checkedin or not
+      })
+    };
 
   handleInput = (event, index) => {
     const { inputs } = this.state;
@@ -74,12 +48,13 @@ class Hardware extends React.Component {
 
   render() {
     const { available, checkedOut, inputs } = this.state;
+    const projectID= this.props.ProjectID;
     return (
       <div>
         {this.props.HWsets.map((set, index) => (
             <div key={set}>
               <span>HWSet {set}: </span>
-                <p>Available: {available[index]}/100</p><br/>
+                <p>Available: {projectID.available[index]}/100</p><br/>
                 <TextField
                     type="number"
                     label="Enter Quantity"
@@ -91,6 +66,9 @@ class Hardware extends React.Component {
                 </button>
                 <button onClick={() => this.handleCheckIn(index)}>
                     Check In
+                </button>
+                <button>
+                  <Link to="/welcome">Log-Out</Link>
                 </button>
             </div>
         ))}

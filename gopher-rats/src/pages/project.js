@@ -4,15 +4,21 @@ import { Link } from "react-router-dom";
 class project extends React.Component
 {
     state = {
-        Name: '',
         Description: '',
         ExistingID: '',
     }
 
     handleSubmitExisting= (event) =>
     {
+        <Hardware ProjectID = {this.props.project.id}></Hardware>
+        fetch(`/joinProject/${this.state.ExistingID}`,{methods: 'GET', mode: "no-cors"})
+            .then(response => response.text())    
+            .then(data => {
+                console.log(data)
+            alert(`${data.projectId}`); //print out if it successfully joined existing one or not.
+        })
         //checks if valid project
-        alert ('Welcome Back', this.state.ExistingID)
+        //alert ('Welcome Back', this.state.ExistingID)
         event.preventDefault();
         //shows name of project and description
         //go to resources/hardware with ID prop 
@@ -39,9 +45,14 @@ class project extends React.Component
                     placeholder=""
                 />
             </div>
+          <button>
+            <Link to="/newProject">Create new project</Link>
+          </button>
           <button type="submit">Enter</button>
           <br></br>
-          <button>Log-Out</button>
+          <button>
+            <Link to="/welcome">Log-Out</Link>
+          </button>
         </form>
         )
     }
