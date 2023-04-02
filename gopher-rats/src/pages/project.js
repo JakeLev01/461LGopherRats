@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 class project extends React.Component
 {
     state = {
-        Name: '',
         Description: '',
         ExistingID: '',
     }
 
     handleSubmitExisting= (event) =>
     {
-        fetch(`/joinProject/${this.state.ExistingID}/${this.state.Name}`,{methods: 'GET', mode: "no-cors"})
+        <Hardware ProjectID = {this.props.project.id}></Hardware>
+        fetch(`/joinProject/${this.state.ExistingID}`,{methods: 'GET', mode: "no-cors"})
             .then(response => response.text())    
             .then(data => {
                 console.log(data)
