@@ -11,8 +11,14 @@ class project extends React.Component
 
     handleSubmitExisting= (event) =>
     {
+        fetch(`/joinProject/${this.state.ExistingID}`,{methods: 'GET', mode: "no-cors"})
+            .then(response => response.text())    
+            .then(data => {
+                console.log(data)
+            alert(`${data.projectId}`); //print out if it successfully joined existing one or not.
+        })
         //checks if valid project
-        alert ('Welcome Back', this.state.ExistingID)
+        //alert ('Welcome Back', this.state.ExistingID)
         event.preventDefault();
         //shows name of project and description
         //go to resources/hardware with ID prop 

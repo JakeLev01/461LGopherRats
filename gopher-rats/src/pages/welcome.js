@@ -8,7 +8,7 @@ class welcome extends React.Component{
   state = {
     Username: '',
     UserID: '',
-    Password: '',
+    Password: ''
   }
   
     handleUsernameChange = (event) => {
@@ -28,10 +28,16 @@ class welcome extends React.Component{
     }
   
     handleUserSubmit = (event) => {
-     
-      alert(`Username: ${this.state.Username}`);
+      fetch(`/checkSignIn/${this.state.UserID}, ${this.state.Password}`,{methods: 'GET', mode: "no-cors"})
+        .then(response => response.text())    
+        .then(data => {
+            console.log(data)
+          alert(`${data.projectId}`); //print out if it successfully signed in or not.
+        })
+ 
+      //alert(`Username: ${this.state.Username}`);
       //go to projects page
-      <Navigate to="/newProject" />;
+      //<Navigate to="/newProject" />;
       event.preventDefault();
     }
 

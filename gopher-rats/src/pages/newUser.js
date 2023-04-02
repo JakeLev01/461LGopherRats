@@ -34,9 +34,15 @@ class newUser extends React.Component {
             alert('Passwords do not match');
             event.preventDefault();
         } else {
-            alert('New user was created');
+            fetch(`/createNewUser/${this.state.UserID}, ${this.state.Password}`,{methods: 'GET', mode: "no-cors"})
+                .then(response => response.text())    
+                .then(data => {
+                    console.log(data)
+                alert(`${data.projectId}`); //print out if it successfully made new user or not
+            })
+            //alert('New user was created');
             //go to projects page
-            return <Navigate to="/newProject" />;
+            //return <Navigate to="/newProject" />;
         }
         
     }

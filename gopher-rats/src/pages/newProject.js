@@ -11,6 +11,12 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
+    fetch(`/checkSignIn/${this.state.UserID},`,{methods: 'GET', mode: "no-cors"})
+      .then(response => response.text())    
+      .then(data => {
+        console.log(data)
+      alert(`${data.projectId}`); //print out if it successfully signed in or not.
+      })
     //check if project id already exists
     alert('New project was created')
     event.preventDefault();
