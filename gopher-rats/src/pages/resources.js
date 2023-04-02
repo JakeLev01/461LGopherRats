@@ -69,6 +69,9 @@ class Hardware extends React.Component {
                 <Button variant="contained" color="secondary" onClick={() => this.handleCheckIn(index)}>
                     Check In
                 </Button>
+                <button> 
+                  <Link to="/project">Leave Project</Link>
+                </button>
                 <button>
                   <Link to="/welcome">Log-Out</Link>
                 </button>

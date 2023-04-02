@@ -39,9 +39,9 @@ class newUser extends React.Component {
             .then(data => {
                 console.log(data)
             alert(`${data}`); //print out if it successfully made new user or not
-        })
-            //go to projects page
-            return <Navigate to="/newProject" />;
+            if (`${data}` == "Account Successfully created")
+                return <Navigate to = "/project" />;
+            })
         }
     }
 

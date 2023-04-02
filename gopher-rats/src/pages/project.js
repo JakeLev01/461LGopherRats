@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link , Navigate} from "react-router-dom";
 import Hardware from './resources';
 
 class project extends React.Component
@@ -17,6 +17,8 @@ class project extends React.Component
             .then(data => {
                 console.log(data)
             alert(`${data}`); //print out if it successfully joined existing one or not.
+            if (`${data}` == "Successfully joined project")
+                return <Navigate to = "/resources" />;
         })
         //checks if valid project
         //alert ('Welcome Back', this.state.ExistingID)
