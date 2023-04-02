@@ -18,6 +18,7 @@ def checkUserName(userName):
        return True
     else:
         return False
+    
 
 #checks if the user exists, then checks if the password is correct
 app.route('/checkSignIn/<string:userID>/<string:password>')
@@ -58,42 +59,38 @@ def createNewUser(userID, password, Username):
 ##################
 
 #check if project already exists, adds new project
-app.route('/addNewProject/')
-def addNewProject(PersonID, Name):
-    PersonID = request.args.get("PersonID")
-    Name = request.args.get("Name")
-
+#newProject.js
+app.route('/addNewProject/<string:ProjectID>/<string:Name>/<string:Description>')
+def addNewProject(ProjectID, Name):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
-
     db = client['Projects']
+    
+    if Name not in db.list_collection_names():
+        mycol = db.create_collection(Name)
+        hw_set_1 = {'HW_set': 1, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
+        hw_set_2 = {'HW_set': 2, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
+        mycol.insert_many([hw_set_1, hw_set_2])
+        new_proj = {'Id': ProjectID, 'Name': Name, 'Description': "Description"}
+        mycol.insert_one(new_proj)
+        return "Successfully added new project"
+    else:
+        return "Project already exists"
 
-    mycol = db.create_collection(Name)
-
-    new_proj = {'Id': PersonID, 'Name': Name}
-    mycol.insert_one(new_proj)
-
-    client.close()
-
-#join project and add user id to database
-app.route("/joinProject/<string:ExistingID/<string:Name>")
-def joinProject(PersonID, Name):
-
-    #join project and add ID to ID list
+#check if project already exists, join
+#project.js
+app.route("/joinProject/<string:ExistingID>")
+def joinProject(ProjectID):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
-
     db = client['Projects']
+    
+    for collection_name in db.list_collection_names():
+        collection = db[collection_name]
+        document = collection.find_one({"ID": ProjectID})
+        if document is not None:
+            return "Successfully joined project"
+        else:
+            return "Project does not exist"
 
-    myproj = db[Name]
-
-    project = myproj.find_one({'Name': Name})
-
-    # Add the new user to the 'users' field in the project document
-    project['ID'].append(PersonID)
-
-    # Update the project document in the collection
-    myproj.update_one({'ID': Name}, {'$set': project})
-
-    client.close()
 
 
 ############
