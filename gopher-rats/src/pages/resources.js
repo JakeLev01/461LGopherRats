@@ -57,7 +57,7 @@ class Hardware extends React.Component {
         {HWsets.map((set, index) => (
             <div key={set}>
               <span>HWSet {set}: </span>
-                <p>Available: {projectID.available[index]}/100</p><br/>
+                <p>Available: {available[index]}/100</p><br/>
                 <TextField
                     type="number"
                     label="Enter Quantity"

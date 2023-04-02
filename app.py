@@ -33,7 +33,7 @@ def checkSignIn(userID, password):
         if document is not None:
             DCpassword = cipher.decrypt(document.get("password"),3,1)
             if DCpassword == password:
-                return "Successfuly Signed In"
+                return "Successfully Signed In"
             else:
                 return "Password is incorrect"
             
@@ -99,7 +99,7 @@ def joinProject(ProjectID):
 ############
 
 
-app.route('/check_out')
+@app.route('/check_out')
 def check_out(projectID, qty, HWSet):
     projectID = request.args.get("projectID")
     qty = request.args.get("qty")
@@ -149,7 +149,7 @@ def check_out(projectID, qty, HWSet):
         return 0
 
 
-app.route('/check_in')
+@app.route('/check_in')
 def check_in(projectID, qty, HWSet):
     projectID = request.args.get("projectID")
     qty = request.args.get("qty")
@@ -201,7 +201,7 @@ def check_in(projectID, qty, HWSet):
 
 
 
-app.route('/getProject/<int:projectID>')
+@app.route('/getProject/<int:projectID>')
 def getProject(projectID):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
@@ -220,19 +220,22 @@ def getProject(projectID):
 #Redirect
 ############
 
-app.route('/resourceRedirect')
+@app.route('/resourceRedirect')
 def resourceRedirect():
     return redirect('/resources')
 
-app.route('/signInRedirect')
+@app.route('/signInRedirect')
 def signInRedirect():
     return redirect('/signIn')
 
-app.route('/newProjectRedirect')
+@app.route('/newProjectRedirect')
 def newProjectRedirect():
     return redirect('/newProject')
 
-app.route('/projectRedirect')
+@app.route('/projectRedirect')
 def projectRedirect():
     return redirect('/project')
 
+
+if __name__ == '__main__':
+    app.run(debug= False,host='0.0.0.0', port=os.environ.get("PORT", 5000))

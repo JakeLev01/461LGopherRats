@@ -24,8 +24,8 @@ class welcome extends React.Component{
         .then(data => {
             console.log(data)
           alert(`${data}`); //print out if it successfully signed in or not.
-          if (`${data}` == "Successfully Signed In")
-            return <Navigate to = "/project" />;
+          if (`${data}` === "Successfully Signed In")
+            return fetch(`/newProjectRedirect`,{ mode: "no-cors"})
         })
       event.preventDefault();
     }
