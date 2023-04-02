@@ -9,7 +9,7 @@ class Hardware extends React.Component {
     this.state = {
     checkedOut: [100, 100],
     available: [100, 100], //get from database
-    HWsets: [1,2],
+    HWsets : [1,2],
     inputs: new Array(2).fill(0)
     };
   }
@@ -23,7 +23,7 @@ class Hardware extends React.Component {
       .then(data => {
         console.log(data)
         this.setState({available: `${data.available}`});
-      alert(`${data.checkedOut}`); //print out if it successfully checkedin or not
+      alert(`${data}`); //print out if it successfully checkedin or not
       })
     };
 

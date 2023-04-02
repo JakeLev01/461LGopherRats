@@ -15,7 +15,11 @@ def checkUserName(userName):
     return False
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 app.route('/checkSignIn/')
+=======
+#check username, grab pwd and compare it
+>>>>>>> Stashed changes
 =======
 #check username, grab pwd and compare it
 >>>>>>> Stashed changes
@@ -36,7 +40,11 @@ def checkSignIn(userName, password):
     return "Username is not in the database"
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 app.route("/createNewUser/")
+=======
+#check if user in database, and add it
+>>>>>>> Stashed changes
 =======
 #check if user in database, and add it
 >>>>>>> Stashed changes
