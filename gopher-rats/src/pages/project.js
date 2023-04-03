@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link , Navigate} from "react-router-dom";
 import Hardware from './resources';
+import currentProjectID from "/Users/lk/461LGopherRats/gopher-rats/src/currentProject";
 
 class project extends React.Component
 {
