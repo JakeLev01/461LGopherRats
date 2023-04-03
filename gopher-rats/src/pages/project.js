@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link , Navigate} from "react-router-dom";
 import Hardware from './resources';
-import currentProjectID from "/Users/lk/461LGopherRats/gopher-rats/src/currentProject";
+//import currentProjectID from "./currentProject";
 
 class project extends React.Component
 {
@@ -12,25 +12,26 @@ class project extends React.Component
 
     handleSubmitExisting= (event) =>
     {
-        //<Hardware ProjectID = {this.props.project.id}></Hardware>
-        fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
+        if (this.state.ExistingID && this.state.ExistingID.trim() !== '') {
+            fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
             .then(response => response.text())    
             .then(data => {
                 console.log(data)
             alert(`${data}`); //print out if it successfully joined existing one or not.
             if (`${data}` == "Successfully joined project")
                 return <Navigate to = "/resources" />;
-        })
-        //checks if valid project
-        //alert ('Welcome Back', this.state.ExistingID)
+            })
         event.preventDefault();
         //shows name of project and description
         //go to resources/hardware with ID prop 
-        //<Hardware projectid={this.props.project.id}/>
+        }else{
+            alert("Please enter valid project information")
+        }
+
+    
     }
 
     handleExistingIDChange = event => {
-        //check if ID exists already
         this.setState({ ExistingID: event.target.value });
       }
 

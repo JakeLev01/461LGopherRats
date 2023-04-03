@@ -9,6 +9,8 @@ import Project from './pages/project';
 import Resources from './pages/resources';
 import React from 'react';
 
+export const UserContext = React.createContext(null);
+
 
 class App extends React.Component {
   render () {

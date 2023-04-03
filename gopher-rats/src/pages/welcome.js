@@ -19,7 +19,8 @@ class welcome extends React.Component{
     }
   
     handleUserSubmit = (event) => {
-      fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{ mode: "no-cors"})
+      if(this.state.UserID.trim() && this.state.Password.trim() !== null){
+        fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{ mode: "no-cors"})
         .then(response => response.text())    
         .then(data => {
             console.log(data)
@@ -28,6 +29,11 @@ class welcome extends React.Component{
             return fetch(`/newProjectRedirect`,{ methods: 'GET', mode: "no-cors"})
         })
       event.preventDefault();
+      }
+      else{
+        alert("Please enter valid credentials")
+      }
+      
     }
 
 

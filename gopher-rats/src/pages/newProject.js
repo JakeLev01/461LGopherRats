@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import Hardware from "./resources";
-import currentProjectID from "/Users/lk/461LGopherRats/gopher-rats/src/currentProject";
+//import {currentProjectID} from "./currentProject";
 
 class newProject extends React.Component {
   state = {
@@ -12,8 +12,8 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
-    //<Hardware ProjectID = {this.props.project.id}></Hardware>
-    fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
+    if(this.state.ProjectID.trim() && this.state.Name.trim() && this.state.Description.trim() != null){
+        fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
       .then(response => response.text())    
       .then(data => {
         console.log(data)
@@ -21,10 +21,13 @@ class newProject extends React.Component {
       if (`${data}` == "Successfully added new project")
         return <Navigate to = "/resources" />;
       })
-    //check if project id already exists
-    //alert('New project was created')
     event.preventDefault();
     //go to resources/hardware with ID prop 
+    }
+    else{
+      alert("Please enter valid project information")
+    }
+
   }
 
   handleNameChange = (event) => {
