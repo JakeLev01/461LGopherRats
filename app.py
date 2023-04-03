@@ -5,23 +5,24 @@ import os
 
 app = Flask(__name__)
 
+
 ##################
-#SignInValidation
+# SignInValidation
 ##################
 
-#checks if user exists
+# checks if user exists
 @app.route('/checkUserName/userName')
 def checkUserName(userName):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Users']
-    
+
     if userName in db.list_collection_names():
-       return True
+        return True
     else:
         return False
-    
 
-#checks if the user exists, then checks if the password is correct
+
+# checks if the user exists, then checks if the password is correct
 @app.route('/checkSignIn/<string:userID>/<string:password>')
 def checkSignIn(userID, password):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
@@ -29,24 +30,25 @@ def checkSignIn(userID, password):
 
     for collection_name in db.list_collection_names():
         collection = db[collection_name]
-        document = collection.find_one({"userID": userID}) #find userID
+        document = collection.find_one({"userID": userID})  # find userID
         if document is not None:
-            DCpassword = cipher.decrypt(document.get("password"),3,1)
+            DCpassword = cipher.decrypt(document.get("password"), 3, 1)
             if DCpassword == password:
                 return "Successfully Signed In"
             else:
                 return "Password is incorrect"
-            
+
     return "Username is not in the database"
 
-#checks if username exists in database, create an encrypted password, then creates a new user collection
+
+# checks if username exists in database, create an encrypted password, then creates a new user collection
 @app.route("/createNewUser/<string:userID>/<string:password>/<string:Username>")
 def createNewUser(userID, password, Username):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Users']
 
     if not checkUserName(Username):
-        DCpassword = cipher.encrypt(password,3,1)
+        DCpassword = cipher.encrypt(password, 3, 1)
         db.create_collection(Username)
         post = {"userID": userID, "password": DCpassword}
         collection = db[Username]
@@ -55,17 +57,21 @@ def createNewUser(userID, password, Username):
     else:
         return "This userName is already taken please chose another one"
 
+
 ##################
-#ProjectValidation
+# ProjectValidation
 ##################
 
-#check if project already exists, adds new project
-#newProject.js
+# check if project already exists, adds new project
+# newProject.js
+global_project_id = ""
 @app.route('/addNewProject/<string:ProjectID>/<string:Name>/<string:Description>')
 def addNewProject(ProjectID, Name, Description):
+    global global_project_id
+    global_project_id = ProjectID
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
-    
+
     if Name not in db.list_collection_names():
         mycol = db.create_collection(Name)
         hw_set_1 = {'HW_set': 1, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
@@ -77,25 +83,25 @@ def addNewProject(ProjectID, Name, Description):
     else:
         return "Project already exists"
 
-#check if project already exists, join
-#project.js
+
+# check if project already exists, join
+# project.js
 @app.route("/joinProject/<string:ProjectID>")
 def joinProject(ProjectID):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
-    
+
     for collection_name in db.list_collection_names():
         collection = db[collection_name]
         document = collection.find_one({"Id": ProjectID})
         if document is not None:
             return "Successfully joined project"
-            
+
     return "Project does not exist"
 
 
-
 ############
-#HardwareSet
+# HardwareSet
 ############
 
 
@@ -176,7 +182,6 @@ def check_in(projectID, qty, HWSet):
             Capacity = doc.get('Capacity')
         break
 
-
     if qty < 0:
         return "Invalid Quantity"
     elif (qty > Capacity) or (qty + HWSetAvailability) > Capacity:
@@ -200,7 +205,6 @@ def check_in(projectID, qty, HWSet):
             db[collection].update_one(post)
 
 
-
 @app.route('/getProject/<int:projectID>')
 def getProject(projectID):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
@@ -216,21 +220,25 @@ def getProject(projectID):
 
     return "Invalid projectID"
 
+
 ############
-#Redirect
+# Redirect
 ############
 
 @app.route('/resourceRedirect')
 def resourceRedirect():
     return redirect('/resources')
 
+
 @app.route('/signInRedirect')
 def signInRedirect():
     return redirect('/signIn')
 
+
 @app.route('/newProjectRedirect')
 def newProjectRedirect():
     return redirect('/newProject')
+
 
 @app.route('/projectRedirect')
 def projectRedirect():
@@ -238,4 +246,4 @@ def projectRedirect():
 
 
 if __name__ == '__main__':
-    app.run(debug= False,host='0.0.0.0', port=os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=os.environ.get("PORT", 5000))
