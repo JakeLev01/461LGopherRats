@@ -82,9 +82,11 @@ class newUser extends React.Component {
                     />
                 </div>
                 <button style={{ marginBottom: '30px' }} type="submit">Submit</button> <br></br>
+                
                 <button>
                     <Link to="/welcome">Go back</Link>
                 </button>
+                <button><Link to="/newProject">Next page</Link></button>
             </form>
         )
     }

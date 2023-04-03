@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import currentProjectID from "./currentProject";
+//import ProjectContext from './projectContext';
+//import currentProjectID from "./projectContext";
 
 class resources extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class resources extends React.Component {
   handleCheckIn = (index) => {
     const { available, inputs, checkedOut } = this.state;
     const input = inputs[index];
-
+    const {currentProjectID} = this.props.location;
+    //const projectID = useContext(ProjectContext);
     fetch(`/checkIn/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
       .then(response => response.json())    
       .then(data => {
@@ -33,7 +35,8 @@ class resources extends React.Component {
   handleCheckOut = (index) => {
     const { available, inputs, checkedOut } = this.state;
     const input = inputs[index];
-
+    const {currentProjectID} = this.props.location;
+    //const projectID = useContext(ProjectContext);
     fetch(`/checkOut/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
       .then(response => response.json())    
       .then(data => {
@@ -58,10 +61,12 @@ class resources extends React.Component {
 
   render() {
     const { available, checkedOut, inputs, HWsets } = this.state;
-
+    //const projectID = useContext(ProjectContext);
+    const projectID = this.props.projectID;
+    //const {currentProjectID} = this.props.location;
     return (
       <div>
-        <h2>Project ID: {currentProjectID}</h2><br/>
+        <h2>Project ID: {projectID}</h2><br/>
         {HWsets.map((set, index) => (
           <div key={set}>
             <span>HWSet {set}: </span>

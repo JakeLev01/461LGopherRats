@@ -61,7 +61,8 @@ class welcome extends React.Component{
               />
             </label>
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit">Submit</button><br></br>
+            <button><Link to="/newProject">Next page</Link></button>
         </form>
         <h4>If you are a new user please sign-up here:</h4>
         <button>
