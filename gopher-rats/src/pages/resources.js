@@ -21,22 +21,18 @@ class resources extends React.Component {
 
   fetchAvailability = () => {
     const { projectID, HWsets, available, checkedOut } = this.state;
-    HWsets.forEach((set, index) => {
-    fetch(`/check_out/${projectID}/${0}/${set}`)
+
+    fetch(`/getProject/${projectID}`)
       .then(response => response.json())    
       .then(data => {
         console.log(data);
-        if(data === "Invalid Quantity"){
-          alert(data)
-        }
-        else{
-          this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
-          this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
-        }
+        this.setState({
+          available: [data.HWSet1Availability, data.HWSet2Availability],
+          checkedOut: [data.HWSet1CheckedOut, data.HWSet2CheckedOut]
+        });
+        console.log(available);
         
-        
-      })
-    });
+      });
   }
 
   handleCheckIn = (index) => {
@@ -107,6 +103,7 @@ class resources extends React.Component {
               label="Enter Quantity"
               value={inputs[index]}
               onChange={(event) => this.handleInput(event, index)}
+              min={0}
             />
             <button onClick={() => this.handleCheckOut(index)}>
               Check Out
