@@ -65,6 +65,7 @@ def createNewUser(userID, password, Username):
 global_project_id = ""
 @app.route('/addNewProject/<string:ProjectID>/<string:Name>/<string:Description>')
 def addNewProject(ProjectID, Name, Description):
+    print("hey")
     global global_project_id
     global_project_id = ProjectID
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
@@ -104,29 +105,31 @@ def joinProject(ProjectID):
 
 #gets projectid, input quantity, and which HWset-> then updates database values, and return the new availability
 @app.route('/check_out/<string:projectID>/<int:qty>/<int:HWset>')
-def check_out(projectID, qty, HWSet):
+def check_out(projectID, qty, HWset):
 
     HWSetAvailability = 0
     CheckedOut = 0
     global collection
+    global doc
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
     cols = db.list_collection_names()
 
     #gets data from database
     for col in cols:
-        doc = col.find()
-        if doc.get('Id') == projectID:
-            collection = col
-            if HWSet == 1:
-                hw_set_doc = collection.find_one({'HW_set': 1})
-                HWSetAvailability = hw_set_doc['Availability']
-                CheckedOut = hw_set_doc['CheckedOut']
-            elif HWSet == 2:
-                hw_set_doc = collection.find_one({'HW_set': 2})
-                HWSetAvailability = hw_set_doc['Availability']
-                CheckedOut = hw_set_doc['CheckedOut']
-        break
+        collection = db[col]
+        doc = collection.find_one({'Id': projectID})
+        if doc is not None:
+            if doc['Id'] == projectID:
+                if HWset == 1:
+                    hw_set_doc = collection.find_one({'HW_set': 1})
+                    HWSetAvailability = hw_set_doc['Availability']
+                    CheckedOut = hw_set_doc['CheckedOut']
+                elif HWset == 2:
+                    hw_set_doc = collection.find_one({'HW_set': 2})
+                    HWSetAvailability = hw_set_doc['Availability']
+                    CheckedOut = hw_set_doc['CheckedOut']
+                break
 
     if qty < 0:
         return "Invalid Quantity"
@@ -138,10 +141,10 @@ def check_out(projectID, qty, HWSet):
         CheckedOut += qty
 
     #updates database
-    if HWSet == 1:
-        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
-    elif HWSet == 2:
-        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+    if HWset == 1:
+        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
+    elif HWset == 2:
+        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
 
     response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
     return jsonify(response)
@@ -149,29 +152,32 @@ def check_out(projectID, qty, HWSet):
 
 #gets projectid, input quantity, and which HWset-> then updates database values, and return the new availability
 @app.route('/check_in/<string:projectID>/<int:qty>/<int:HWset>')
-def check_in(projectID, qty, HWSet):
+def check_in(projectID, qty, HWset):
 
     HWSetAvailability = 0
     CheckedOut = 0
-    Capacity = 0
+    Capacity = 100
+    global collection
+    global doc
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
     cols = db.list_collection_names()
-    global collection
 
+    # gets data from database
     for col in cols:
-        doc = col.find()
-        if doc.get('ProjectID') == projectID:
-            collection = col
-            if HWSet == 1:
-                hw_set_doc = collection.find_one({'HW_set': 1})
-                HWSetAvailability = hw_set_doc['Availability']
-                CheckedOut = hw_set_doc['CheckedOut']
-            elif HWSet == 2:
-                hw_set_doc = collection.find_one({'HW_set': 2})
-                HWSetAvailability = hw_set_doc['Availability']
-                CheckedOut = hw_set_doc['CheckedOut']
-        break
+        collection = db[col]
+        doc = collection.find_one({'Id': projectID})
+        if doc is not None:
+            if doc['Id'] == projectID:
+                if HWset == 1:
+                    hw_set_doc = collection.find_one({'HW_set': 1})
+                    HWSetAvailability = hw_set_doc['Availability']
+                    CheckedOut = hw_set_doc['CheckedOut']
+                elif HWset == 2:
+                    hw_set_doc = collection.find_one({'HW_set': 2})
+                    HWSetAvailability = hw_set_doc['Availability']
+                    CheckedOut = hw_set_doc['CheckedOut']
+                break
 
     if qty < 0:
         return "Invalid Quantity"
@@ -182,12 +188,12 @@ def check_in(projectID, qty, HWSet):
     else:
         HWSetAvailability += qty
         CheckedOut -= qty
-        
-    #updates database
-    if HWSet == 1:
-        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
-    elif HWSet == 2:
-        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+
+    # updates database
+    if HWset == 1:
+        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
+    elif HWset == 2:
+        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
 
     response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
     return jsonify(response)
