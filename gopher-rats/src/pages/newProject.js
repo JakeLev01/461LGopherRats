@@ -21,7 +21,7 @@ class newProject extends React.Component {
       alert(`${data}`); //print out if it successfully signed in or not.
       if (`${data}` == "Successfully added new project") {
         //setProjectID(this.state.ProjectID); // set the project ID to the context
-        return <Navigate to = "/resources" />;
+        window.location.href = "/resources";
       }
       })
     event.preventDefault();
@@ -76,7 +76,6 @@ class newProject extends React.Component {
             />
           </div>
           <button type="submit">Create Project</button><br></br>
-          <button><Link to="/resources">Next page</Link></button>
         </form>
         <h4>Or use an existing project:</h4>
         <button>

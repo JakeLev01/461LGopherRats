@@ -40,7 +40,7 @@ class newUser extends React.Component {
                 console.log(data)
             alert(`${data}`); //print out if it successfully made new user or not
             if (`${data}` == "Account Successfully created")
-                return <Navigate to = "/project" />;
+                window.location.href = "/newProject";
             })
         }
     }
@@ -86,7 +86,6 @@ class newUser extends React.Component {
                 <button>
                     <Link to="/welcome">Go back</Link>
                 </button>
-                <button><Link to="/newProject">Next page</Link></button>
             </form>
         )
     }

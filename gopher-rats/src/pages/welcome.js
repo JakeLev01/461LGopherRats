@@ -26,7 +26,7 @@ class welcome extends React.Component{
             console.log(data)
           alert(`${data}`); //print out if it successfully signed in or not.
           if (`${data}` === "Successfully Signed In")
-            return fetch(`/newProjectRedirect`,{ methods: 'GET', mode: "no-cors"})
+            window.location.href = "/newProject";
         })
       event.preventDefault();
       }
@@ -62,7 +62,6 @@ class welcome extends React.Component{
             </label>
             <br />
             <button type="submit">Submit</button><br></br>
-            <button><Link to="/newProject">Next page</Link></button>
         </form>
         <h4>If you are a new user please sign-up here:</h4>
         <button>
