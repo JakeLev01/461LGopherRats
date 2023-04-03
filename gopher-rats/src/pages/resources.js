@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation} from "react-router-dom";
 //import ProjectContext from './projectContext';
 //import currentProjectID from "./projectContext";
 
@@ -17,8 +17,9 @@ class resources extends React.Component {
   handleCheckIn = (index) => {
     const { available, inputs, checkedOut } = this.state;
     const input = inputs[index];
-    const {currentProjectID} = this.props.location;
+    //const {currentProjectID} = this.props.location;
     //const projectID = useContext(ProjectContext);
+    const currentProjectID = this.props.projectID;
     fetch(`/checkIn/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
       .then(response => response.json())    
       .then(data => {
@@ -35,8 +36,9 @@ class resources extends React.Component {
   handleCheckOut = (index) => {
     const { available, inputs, checkedOut } = this.state;
     const input = inputs[index];
-    const {currentProjectID} = this.props.location;
+    //const {currentProjectID} = this.props.location;
     //const projectID = useContext(ProjectContext);
+    const currentProjectID = this.props.projectID;
     fetch(`/checkOut/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
       .then(response => response.json())    
       .then(data => {

@@ -61,8 +61,11 @@ def createNewUser(userID, password, Username):
 
 #check if project already exists, adds new project
 #newProject.js
+global_project_id = ""
 @app.route('/addNewProject/<string:ProjectID>/<string:Name>/<string:Description>')
 def addNewProject(ProjectID, Name, Description):
+    global global_project_id
+    global_project_id = ProjectID
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
     
@@ -189,6 +192,9 @@ def check_in(projectID, qty, HWSet):
     response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
     return jsonify(response)
 
+@app.route('/getProjectID')
+def getProjectID():
+    return global_project_id
 
 @app.route('/getProject/<int:projectID>')
 def getProject(projectID):

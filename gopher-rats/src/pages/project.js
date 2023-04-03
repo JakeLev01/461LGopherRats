@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link , Navigate} from "react-router-dom";
 import Hardware from './resources';
-import ProjectContext from './projectContext';
+//import ProjectContext from './projectContext';
 //import currentProjectID from "./currentProject";
 
 class project extends React.Component
@@ -13,6 +13,7 @@ class project extends React.Component
 
     handleSubmitExisting= (event) =>
     {
+        //const history = useHistory();
         if (this.state.ExistingID && this.state.ExistingID.trim() !== '') {
             fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
             .then(response => response.text())    
@@ -22,6 +23,7 @@ class project extends React.Component
             if (`${data}` == "Successfully joined project")
             //setProjectID(this.state.ProjectID); // set the project ID to the context
                 return <Navigate to = "/resources" />;
+                //history.push(`/resources/${ExistingID}`);
             })
         event.preventDefault();
         //shows name of project and description
@@ -55,7 +57,10 @@ class project extends React.Component
                 />
             </div>
           <button type="submit">Enter</button> <br></br>
-          <button><Link to="/resources">Next page</Link></button><br></br>
+          <button>
+            <Link to={'/resources'}>Next page</Link>
+            
+          </button><br></br>
           <h4>or create a new project:</h4>
           <button>
             <Link to="/newProject">Create new project</Link>
