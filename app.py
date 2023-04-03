@@ -199,17 +199,22 @@ def check_in(projectID, qty, HWset):
     return jsonify(response)
 
 
-@app.route('/getProject/<int:projectID>')
+@app.route('/getProject/<string:projectID>')
 def getProject(projectID):
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
     db = client['Projects']
     cols = db.list_collection_names()
     for col in cols:
-        doc = col.find()
-        if doc.get('ProjectID') == projectID:
-            post = {"ProjectID": doc.get('ProjectID'), "HWSet1Availability": doc.get('HWSet1Availability'),
-                    "HWSet2Availability": doc.get('HWSet1Availability'), "Capacity": doc.get('Capacity'),
-                    "HWSet1Checked Out": doc.get('HWSet1CheckedOut'), "HWSet2Checked Out": doc.get('HWSet2CheckedOut')}
+        collection = db[col]
+        doc = collection.find_one({'Id': projectID})
+        if doc is not None:
+            if doc['Id'] == projectID:
+                hw_set_1_doc = collection.find_one({'HW_set': 1})
+                hw_set_2_doc = collection.find_one({'HW_set': 2})
+                post = {"HWSet1Availability": hw_set_1_doc['Availability'],
+                    "HWSet2Availability":hw_set_2_doc['Availability'],
+                    "HWSet1CheckedOut": hw_set_1_doc['CheckedOut'], 
+                    "HWSet2CheckedOut": hw_set_2_doc['CheckedOut']}
             return jsonify(post)
 
     return "Invalid projectID"
