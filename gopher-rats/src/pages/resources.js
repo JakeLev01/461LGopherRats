@@ -7,6 +7,7 @@ class resources extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      projectID: localStorage.getItem("projectID"),
       checkedOut: [0, 0],
       available: [100, 100], //get from database
       HWsets : [1,2],
@@ -14,42 +15,71 @@ class resources extends React.Component {
     };
   }
 
-  handleCheckIn = (index) => {
-    const { available, inputs, checkedOut } = this.state;
-    const input = inputs[index];
-    //const {currentProjectID} = this.props.location;
-    //const projectID = useContext(ProjectContext);
-    const currentProjectID = this.props.projectID;
-    fetch(`/checkIn/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
+  componentDidMount() {
+    this.fetchAvailability();
+  }
+
+  fetchAvailability = () => {
+    const { projectID, HWsets, available, checkedOut } = this.state;
+    HWsets.forEach((set, index) => {
+    fetch(`/check_out/${projectID}/${0}/${set}`)
       .then(response => response.json())    
       .then(data => {
         console.log(data);
         if(data === "Invalid Quantity"){
           alert(data)
         }
-        this.setState({ available: [...available.slice(0, index), data.available, ...available.slice(index + 1)] });
-        this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
+        else{
+          this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
+          this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
+        }
+        
         
       })
+    });
+  }
+
+  handleCheckIn = (index) => {
+    const { available, inputs, checkedOut, projectID, HWsets } = this.state;
+    const input = inputs[index];
+    if(input >= 0){
+      fetch(`/check_in/${projectID}/${input}/${HWsets[index]}`)
+      .then(response => response.json())    
+      .then(data => {
+        console.log(data);
+        if(data === "Invalid Quantity"){
+          alert(data)
+        }
+        else{
+        this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
+        this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
+        }
+        
+      })
+    }
+    
   }
 
   handleCheckOut = (index) => {
-    const { available, inputs, checkedOut } = this.state;
+    const { available, inputs, checkedOut, projectID, HWsets } = this.state;
     const input = inputs[index];
-    //const {currentProjectID} = this.props.location;
-    //const projectID = useContext(ProjectContext);
-    const currentProjectID = this.props.projectID;
-    fetch(`/checkOut/${currentProjectID}/${input}/${index}`, { method: 'GET', mode: "no-cors" })
+    if(input >= 0){
+      fetch(`/check_out/${projectID}/${input}/${HWsets[index]}`)
       .then(response => response.json())    
       .then(data => {
         console.log(data);
         if(data === "Invalid Quantity"){
           alert(data)
         }
-        this.setState({ available: [...available.slice(0, index), data.available, ...available.slice(index + 1)] });
-        this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
+        else{
+          this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
+          this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
+        }
+        
         
       })
+    }
+    
   }
 
   handleInput = (event, index) => {
@@ -62,10 +92,8 @@ class resources extends React.Component {
   }
 
   render() {
-    const { available, checkedOut, inputs, HWsets } = this.state;
-    //const projectID = useContext(ProjectContext);
-    const projectID = this.props.projectID;
-    //const {currentProjectID} = this.props.location;
+    const { available, checkedOut, inputs, HWsets, projectID } = this.state;
+    
     return (
       <div>
         <h2>Project ID: {projectID}</h2><br/>
@@ -80,10 +108,10 @@ class resources extends React.Component {
               value={inputs[index]}
               onChange={(event) => this.handleInput(event, index)}
             />
-            <button variant="contained" color="primary" onClick={() => this.handleCheckOut(index)}>
+            <button onClick={() => this.handleCheckOut(index)}>
               Check Out
             </button>
-            <button variant="contained" color="secondary" onClick={() => this.handleCheckIn(index)}>
+            <button  onClick={() => this.handleCheckIn(index)}>
               Check In
             </button>
             <p></p>

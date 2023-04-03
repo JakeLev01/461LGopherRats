@@ -14,7 +14,7 @@ class project extends React.Component
     handleSubmitExisting= (event) =>
     {
         //const history = useHistory();
-        const path = '/resources'
+        localStorage.setItem("projectID", this.state.ExistingID);
         if (this.state.ExistingID && this.state.ExistingID.trim() !== '') {
             fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
             .then(response => response.text())    
