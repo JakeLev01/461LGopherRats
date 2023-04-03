@@ -62,8 +62,6 @@ def createNewUser(userID, password, Username):
 # ProjectValidation
 ##################
 
-# check if project already exists, adds new project
-# newProject.js
 global_project_id = ""
 @app.route('/addNewProject/<string:ProjectID>/<string:Name>/<string:Description>')
 def addNewProject(ProjectID, Name, Description):
@@ -74,8 +72,8 @@ def addNewProject(ProjectID, Name, Description):
 
     if Name not in db.list_collection_names():
         mycol = db.create_collection(Name)
-        hw_set_1 = {'HW_set': 1, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
-        hw_set_2 = {'HW_set': 2, 'Capacity': 0, 'Availability': 0, 'CheckedOut': 0}
+        hw_set_1 = {'HW_set': 1, 'Capacity': 100, 'Availability': 100, 'CheckedOut': 0}
+        hw_set_2 = {'HW_set': 2, 'Capacity': 100, 'Availability': 100, 'CheckedOut': 0}
         mycol.insert_many([hw_set_1, hw_set_2])
         new_proj = {'Id': ProjectID, 'Description': Description}
         mycol.insert_one(new_proj)
@@ -104,12 +102,9 @@ def joinProject(ProjectID):
 # HardwareSet
 ############
 
-
-@app.route('/check_out')
+#gets projectid, input quantity, and which HWset-> then updates database values, and return the new availability
+@app.route('/check_out/<string:projectID>/<int:qty>/<int:HWset>')
 def check_out(projectID, qty, HWSet):
-    projectID = request.args.get("projectID")
-    qty = request.args.get("qty")
-    HWSet = request.args.get("HWSet")
 
     HWSetAvailability = 0
     CheckedOut = 0
@@ -118,16 +113,19 @@ def check_out(projectID, qty, HWSet):
     db = client['Projects']
     cols = db.list_collection_names()
 
+    #gets data from database
     for col in cols:
         doc = col.find()
-        if doc.get('ProjectID') == projectID:
+        if doc.get('Id') == projectID:
             collection = col
             if HWSet == 1:
-                HWSetAvailability = doc.get("HWSet1Availability")
-                CheckedOut = doc.get('HWSet1CheckedOut')
+                hw_set_doc = collection.find_one({'HW_set': 1})
+                HWSetAvailability = hw_set_doc['Availability']
+                CheckedOut = hw_set_doc['CheckedOut']
             elif HWSet == 2:
-                HWSetAvailability = doc.get("HWSet2Availability")
-                CheckedOut = doc.get('HWSet2CheckedOut')
+                hw_set_doc = collection.find_one({'HW_set': 2})
+                HWSetAvailability = hw_set_doc['Availability']
+                CheckedOut = hw_set_doc['CheckedOut']
         break
 
     if qty < 0:
@@ -135,31 +133,23 @@ def check_out(projectID, qty, HWSet):
     elif qty > HWSetAvailability:
         CheckedOut += HWSetAvailability
         HWSetAvailability = 0
-        if HWSet == 1:
-            post = {"HWSet1Availability": HWSetAvailability, "HWSet1CheckedOut": CheckedOut}
-            db[collection].update_one(post)
-        elif HWSet == 2:
-            post = {"HWSet2Availability": HWSetAvailability, "HWSet2CheckedOut": CheckedOut}
-            db[collection].update_one(post)
-        return
     else:
         HWSetAvailability -= qty
         CheckedOut += qty
-        if HWSet == 1:
-            post = {"HWSet1Availability": HWSetAvailability, "HWSet1CheckedOut": CheckedOut}
-            db[collection].update_one(post)
-        elif HWSet == 2:
-            post = {"HWSet2Availability": HWSetAvailability, "HWSet2CheckedOut": CheckedOut}
-            db[collection].update_one(post)
 
-        return 0
+    #updates database
+    if HWSet == 1:
+        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+    elif HWSet == 2:
+        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+
+    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
+    return jsonify(response)
 
 
-@app.route('/check_in')
+#gets projectid, input quantity, and which HWset-> then updates database values, and return the new availability
+@app.route('/check_in/<string:projectID>/<int:qty>/<int:HWset>')
 def check_in(projectID, qty, HWSet):
-    projectID = request.args.get("projectID")
-    qty = request.args.get("qty")
-    HWSet = request.args.get("HWSet")
 
     HWSetAvailability = 0
     CheckedOut = 0
@@ -174,12 +164,13 @@ def check_in(projectID, qty, HWSet):
         if doc.get('ProjectID') == projectID:
             collection = col
             if HWSet == 1:
-                HWSetAvailability = doc.get("HWSet1Availability")
-                CheckedOut = doc.get('HWSet1CheckedOut')
+                hw_set_doc = collection.find_one({'HW_set': 1})
+                HWSetAvailability = hw_set_doc['Availability']
+                CheckedOut = hw_set_doc['CheckedOut']
             elif HWSet == 2:
-                HWSetAvailability = doc.get("HWSet2Availability")
-                CheckedOut = doc.get('HWSet2CheckedOut')
-            Capacity = doc.get('Capacity')
+                hw_set_doc = collection.find_one({'HW_set': 2})
+                HWSetAvailability = hw_set_doc['Availability']
+                CheckedOut = hw_set_doc['CheckedOut']
         break
 
     if qty < 0:
@@ -188,21 +179,18 @@ def check_in(projectID, qty, HWSet):
         updateCheckOut = Capacity - HWSetAvailability
         CheckedOut -= updateCheckOut
         HWSetAvailability = Capacity
-        if HWSet == 1:
-            post = {"HWSet1Availability": HWSetAvailability, "HWSet1CheckedOut": CheckedOut}
-            db[collection].update_one(post)
-        elif HWSet == 2:
-            post = {"HWSet2Availability": HWSetAvailability, "HWSet2CheckedOut": CheckedOut}
-            db[collection].update_one(post)
     else:
         HWSetAvailability += qty
         CheckedOut -= qty
-        if HWSet == 1:
-            post = {"HWSet1Availability": HWSetAvailability, "HWSet1CheckedOut": CheckedOut}
-            db[collection].update_one(post)
-        elif HWSet == 2:
-            post = {"HWSet2Availability": HWSetAvailability, "HWSet2CheckedOut": CheckedOut}
-            db[collection].update_one(post)
+        
+    #updates database
+    if HWSet == 1:
+        collection.update_one({"HW_set": 1}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+    elif HWSet == 2:
+        collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability}}, {"set": {"CheckedOut": CheckedOut}})
+
+    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
+    return jsonify(response)
 
 
 @app.route('/getProject/<int:projectID>')

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import Hardware from "./resources";
+//import ProjectContext from './projectContext';
+//import {currentProjectID} from "./currentProject";
 
 class newProject extends React.Component {
   state = {
@@ -11,19 +13,23 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
-    //<Hardware ProjectID = {this.props.project.id}></Hardware>
-    fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
+    if(this.state.ProjectID.trim() && this.state.Name.trim() && this.state.Description.trim() != null){
+        fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
       .then(response => response.text())    
       .then(data => {
         console.log(data)
       alert(`${data}`); //print out if it successfully signed in or not.
-      if (`${data}` == "Successfully added new project")
+      if (`${data}` == "Successfully added new project") {
+        //setProjectID(this.state.ProjectID); // set the project ID to the context
         return <Navigate to = "/resources" />;
+      }
       })
-    //check if project id already exists
-    //alert('New project was created')
     event.preventDefault();
     //go to resources/hardware with ID prop 
+    }
+    else{
+      alert("Please enter valid project information")
+    }
   }
 
   handleNameChange = (event) => {
@@ -69,12 +75,13 @@ class newProject extends React.Component {
               placeholder=""
             />
           </div>
-          <button type="submit">Create Project</button>
+          <button type="submit">Create Project</button><br></br>
+          <button><Link to="/resources">Next page</Link></button>
         </form>
         <h4>Or use an existing project:</h4>
         <button>
           <Link to="/project">use existing project</Link>
-        </button>
+        </button><br></br>
         <button>
             <Link to="/welcome">Log-Out</Link>
           </button>

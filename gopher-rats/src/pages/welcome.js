@@ -19,15 +19,21 @@ class welcome extends React.Component{
     }
   
     handleUserSubmit = (event) => {
-      fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{ mode: "no-cors"})
+      if(this.state.UserID.trim() && this.state.Password.trim() !== null){
+        fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{ mode: "no-cors"})
         .then(response => response.text())    
         .then(data => {
             console.log(data)
           alert(`${data}`); //print out if it successfully signed in or not.
           if (`${data}` === "Successfully Signed In")
-            return fetch(`/newProjectRedirect`,{ mode: "no-cors"})
+            return fetch(`/newProjectRedirect`,{ methods: 'GET', mode: "no-cors"})
         })
       event.preventDefault();
+      }
+      else{
+        alert("Please enter valid credentials")
+      }
+      
     }
 
 
@@ -55,7 +61,8 @@ class welcome extends React.Component{
               />
             </label>
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit">Submit</button><br></br>
+            <button><Link to="/newProject">Next page</Link></button>
         </form>
         <h4>If you are a new user please sign-up here:</h4>
         <button>

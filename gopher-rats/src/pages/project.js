@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link , Navigate} from "react-router-dom";
 import Hardware from './resources';
+//import ProjectContext from './projectContext';
+//import currentProjectID from "./currentProject";
 
 class project extends React.Component
 {
@@ -11,25 +13,29 @@ class project extends React.Component
 
     handleSubmitExisting= (event) =>
     {
-        //<Hardware ProjectID = {this.props.project.id}></Hardware>
-        fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
+        //const history = useHistory();
+        if (this.state.ExistingID && this.state.ExistingID.trim() !== '') {
+            fetch(`/joinProject/${this.state.ExistingID}`,{ mode: "no-cors"})
             .then(response => response.text())    
             .then(data => {
                 console.log(data)
             alert(`${data}`); //print out if it successfully joined existing one or not.
             if (`${data}` == "Successfully joined project")
+            //setProjectID(this.state.ProjectID); // set the project ID to the context
                 return <Navigate to = "/resources" />;
-        })
-        //checks if valid project
-        //alert ('Welcome Back', this.state.ExistingID)
+                //history.push(`/resources/${ExistingID}`);
+            })
         event.preventDefault();
         //shows name of project and description
         //go to resources/hardware with ID prop 
-        //<Hardware projectid={this.props.project.id}/>
+        }else{
+            alert("Please enter valid project information")
+        }
+
+    
     }
 
     handleExistingIDChange = event => {
-        //check if ID exists already
         this.setState({ ExistingID: event.target.value });
       }
 
@@ -38,6 +44,7 @@ class project extends React.Component
         const{ExistingID} = this.state;
 
         return(
+        
         <form onSubmit={this.handleSubmitExisting}>
             <div>
                 <h1>Existing Projects:</h1>
@@ -51,6 +58,11 @@ class project extends React.Component
             </div>
           <button type="submit">Enter</button> <br></br>
           <button>
+            <Link to={'/resources'}>Next page</Link>
+            
+          </button><br></br>
+          <h4>or create a new project:</h4>
+          <button>
             <Link to="/newProject">Create new project</Link>
           </button>
           <br></br>
@@ -58,7 +70,7 @@ class project extends React.Component
             <Link to="/welcome">Log-Out</Link>
           </button>
         </form>
-        
+
         )
     }
 }
