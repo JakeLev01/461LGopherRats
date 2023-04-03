@@ -12,22 +12,20 @@ class welcome extends React.Component{
 
     handleUserIDChange = event => {
       this.setState({ UserID: event.target.value });
-      //check if ID exists already
     }
 
     handlePasswordChange = event => {
       this.setState({ Password: event.target.value });
-      //check if correct password for this userID
     }
   
     handleUserSubmit = (event) => {
-      fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{methods: 'GET', mode: "no-cors"})
+      fetch(`/checkSignIn/${this.state.UserID}/${this.state.Password}`,{ mode: "no-cors"})
         .then(response => response.text())    
         .then(data => {
             console.log(data)
-          alert(`${data.projectId}`); //print out if it successfully signed in or not.
-          if (`${data.projectId}` == "Successfully Signed In")
-            return <Navigate to = "/project" />;
+          alert(`${data}`); //print out if it successfully signed in or not.
+          if (`${data}` === "Successfully Signed In")
+            return fetch(`/newProjectRedirect`,{ mode: "no-cors"})
         })
       event.preventDefault();
     }

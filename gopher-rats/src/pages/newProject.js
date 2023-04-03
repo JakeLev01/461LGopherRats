@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import Hardware from "resources.js";
+import Hardware from "./resources";
 
 class newProject extends React.Component {
   state = {
@@ -11,13 +11,13 @@ class newProject extends React.Component {
   }
 
   handleSubmitProject = (event) => {
-    <Hardware ProjectID = {this.props.project.id}></Hardware>
-    fetch(`/checkSignIn/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
+    //<Hardware ProjectID = {this.props.project.id}></Hardware>
+    fetch(`/addNewProject/${this.state.ProjectID}/${this.state.Name}/${this.state.Description}`,{methods: 'GET', mode: "no-cors"})
       .then(response => response.text())    
       .then(data => {
         console.log(data)
-      alert(`${data.projectId}`); //print out if it successfully signed in or not.
-      if (`${data.projectId}` == "Successfully added new project")
+      alert(`${data}`); //print out if it successfully signed in or not.
+      if (`${data}` == "Successfully added new project")
         return <Navigate to = "/resources" />;
       })
     //check if project id already exists
