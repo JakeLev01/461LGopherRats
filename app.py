@@ -55,7 +55,7 @@ def createNewUser(userID, password, Username):
         collection.insert_one(post)
         return "Account Successfully created"
     else:
-        return "This userName is already taken please chose another one"
+        return "This userName is already taken please choose another one"
 
 
 ##################
@@ -109,6 +109,7 @@ def check_out(projectID, qty, HWset):
 
     HWSetAvailability = 0
     CheckedOut = 0
+    message = "Successfully Checked-out"
     global collection
     global doc
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
@@ -132,10 +133,12 @@ def check_out(projectID, qty, HWset):
                 break
 
     if qty < 0:
-        return "Invalid Quantity"
+        response = {'message': "Invalid Quantity"}
+        return jsonify(response)
     elif qty > HWSetAvailability:
         CheckedOut += HWSetAvailability
         HWSetAvailability = 0
+        message = "Unable to checkout entire quantity"
     else:
         HWSetAvailability -= qty
         CheckedOut += qty
@@ -146,7 +149,7 @@ def check_out(projectID, qty, HWset):
     elif HWset == 2:
         collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
 
-    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
+    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut, 'message': message}
     return jsonify(response)
 
 
@@ -157,6 +160,7 @@ def check_in(projectID, qty, HWset):
     HWSetAvailability = 0
     CheckedOut = 0
     Capacity = 100
+    message = "Successfully Checked-in"
     global collection
     global doc
     client = MongoClient("mongodb+srv://jakeleverett:rOxNEdt5txSolGvm@cluster0.ikaumwm.mongodb.net/test")
@@ -180,11 +184,13 @@ def check_in(projectID, qty, HWset):
                 break
 
     if qty < 0:
-        return "Invalid Quantity"
+        response = {'message': "Invalid Quantity"}
+        return jsonify(response)
     elif (qty > Capacity) or (qty + HWSetAvailability) > Capacity:
         updateCheckOut = Capacity - HWSetAvailability
         CheckedOut -= updateCheckOut
         HWSetAvailability = Capacity
+        message = "Unable to check in entire quantity"
     else:
         HWSetAvailability += qty
         CheckedOut -= qty
@@ -195,7 +201,7 @@ def check_in(projectID, qty, HWset):
     elif HWset == 2:
         collection.update_one({"HW_set": 2}, {"$set": {"Availability": HWSetAvailability, "CheckedOut": CheckedOut}}, upsert=False)
 
-    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut}
+    response = {'availability': HWSetAvailability, 'checkedout': CheckedOut, 'message': message}
     return jsonify(response)
 
 
