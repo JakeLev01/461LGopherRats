@@ -3,6 +3,13 @@
 ECE461L Software Design Lab Project
 
 By: Lindsey Kim, Charu Prasad, Jessie Rho, Jake Leverett, Mahek Kakkar
+## Download before starting
+
+### pip install Flask
+### React: https://legacy.reactjs.org/docs/getting-started.html
+### npm i react-scripts
+### npm i react-router-dom
+### npm i web-vitals
 
 ## Available Scripts
 
