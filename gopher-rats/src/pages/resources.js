@@ -43,13 +43,9 @@ class resources extends React.Component {
       .then(response => response.json())    
       .then(data => {
         console.log(data);
-        if(data === "Invalid Quantity"){
-          alert(data)
-        }
-        else{
+        alert(data.message)
         this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
         this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
-        }
         
       })
     }
@@ -64,14 +60,9 @@ class resources extends React.Component {
       .then(response => response.json())    
       .then(data => {
         console.log(data);
-        if(data === "Invalid Quantity"){
-          alert(data)
-        }
-        else{
+        alert(data.message)
           this.setState({ available: [...available.slice(0, index), data.availability, ...available.slice(index + 1)] });
           this.setState({ checkedOut: [...checkedOut.slice(0, index), data.checkedout, ...checkedOut.slice(index + 1)] });
-        }
-        
         
       })
     }
